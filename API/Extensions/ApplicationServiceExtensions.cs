@@ -9,6 +9,7 @@ namespace API.Extensions;
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
             services.AddControllers();
+            services.AddCors();
             services.AddDbContext<StoreContext>(opt=>
             {
             opt.UseSqlite(config.GetConnectionString("DefaultConnection"));

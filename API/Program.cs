@@ -28,6 +28,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthorization();
 app.MapControllers();
+app.UseCors(x=>x.AllowAnyHeader().AllowAnyOrigin().AllowCredentials().AllowAnyMethod()
+.WithOrigins("http://localhost:3000"));
+
+// app.UseCors(opt=>
+// {
+//     opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+// });
 
 var scope = app.Services.CreateScope();
 var context = scope.ServiceProvider.GetRequiredService<StoreContext>();
