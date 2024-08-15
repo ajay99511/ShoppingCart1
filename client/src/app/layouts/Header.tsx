@@ -1,6 +1,7 @@
 import { AddShoppingCart } from "@mui/icons-material";
 import { AppBar, Badge, Box, IconButton, List, ListItem, Switch, Toolbar, Typography } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import { useStoreContext } from "../context/StoreContext";
 
 interface Props{
     darkMode : boolean;
@@ -9,7 +10,8 @@ interface Props{
 
 const midLinks = [{title:'catalog',path:'/catalog'},
     {title:'about',path:'/about'},
-    {title:'contact',path:'/contact'}
+    {title:'contact',path:'/contact'},
+    {title:'error',path:'/error'}
 ];
 const rightLinks = [ {title:'login',path:'/login'},
     {title:'register',path:'/register'}
@@ -25,6 +27,8 @@ const navStyles ={color:"inherit",typography:"h6",
 };
 
 export default function Header({darkMode,handleThemeChange}:Props){
+    const {basket} = useStoreContext();
+    const itemCount = basket?.items.reduce((sum,item)=>sum+item.quantity,0);
     return(
         <AppBar position="static" sx={{mb:4}}>
             <Toolbar sx={{display:'flex', justifyContent:'space-between', alignContent:'center'}}>
@@ -36,7 +40,7 @@ export default function Header({darkMode,handleThemeChange}:Props){
                 sx={{color:"inherit",
                 textDecoration:"none",
                 
-                }}>Re-Store</Typography>
+                }}>Speed-Cart</Typography>
                 <Switch checked={darkMode} onChange={handleThemeChange} />
                 </Box>
 
@@ -56,8 +60,8 @@ export default function Header({darkMode,handleThemeChange}:Props){
                 </Box>
 
                <Box display='flex' alignContent='center'>
-               <IconButton size="large" edge="start" color="inherit" sx={{mr:2}}>
-                    <Badge badgeContent='4' color="secondary">
+               <IconButton size="large" edge="start" color="inherit" sx={{mr:2}} component={Link} to={'basket'} >
+                    <Badge badgeContent={itemCount} color="secondary">
                         <AddShoppingCart/>
                     </Badge>
                 </IconButton>

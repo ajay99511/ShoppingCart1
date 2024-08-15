@@ -2,16 +2,19 @@ import { Button } from "@mui/material"
 import { Product } from "../../app/models/Product"
 import { useState, useEffect } from "react";
 import ProductList from "./ProductList";
+import agent from "../../app/api/agent";
+import LoadingComponent from "../../app/layouts/LoadingComponent";
 
 export default function Catalog(){
     const [products,setProducts] = useState<Product[]>([]);
+    const [loading,setLoading] = useState(true);
 
-  useEffect(()=>
-  {
-    fetch('http://localhost:5000/api/Products')
-    .then(response=>response.json())
-    .then(data=>setProducts(data))
-  },[])
+  useEffect(()=>{
+    agent.catalog.list()
+    .then(products=> setProducts(products))
+    .catch(error=>console.log(error))
+    .finally(()=>setLoading(false))
+  }, [])
   
   function addProduct()
   {
@@ -24,6 +27,7 @@ export default function Catalog(){
       pictureUrl:'http://picsum.photos/200',
     }]);
   }
+  if(loading) return( <LoadingComponent message="Loading Products..."/>)
     return (
         <>
       <ProductList products={products} />

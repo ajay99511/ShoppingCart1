@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 
 
-export default function(){
+export default function AboutPage(){
     return(
         <Typography variant="h3">
             About Pages
