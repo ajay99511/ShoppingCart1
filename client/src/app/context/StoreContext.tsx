@@ -36,7 +36,6 @@ export function StoreProvider({children}:PropsWithChildren<any>)
             setBasket(prevState=>{
                 return {...prevState!,items}
             })
-
         }
     }
     return(

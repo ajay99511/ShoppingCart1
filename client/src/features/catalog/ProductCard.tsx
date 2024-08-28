@@ -1,27 +1,20 @@
-import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, ListItem, ListItemAvatar, ListItemText, Typography } from "@mui/material"
+import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Typography } from "@mui/material"
 import { Product } from "../../app/models/Product"
-import { brown, red } from "@mui/material/colors"
+import { brown } from "@mui/material/colors"
 import { Link } from "react-router-dom"
-import { useState } from "react"
-import agent from "../../app/api/agent"
-import { LoadingButton } from "@material-ui/lab"
-import { useStoreContext } from "../../app/context/StoreContext"
+import { LoadingButton } from "@mui/lab"
 import { currencyFormat } from "../../app/util/util"
+import { UseAppDispatch, useAppSelector } from "../../app/store/ConfigureStore"
+import { AddBasketItemAsync } from "../basket/BasketSlice"
 
 interface Props{
     product:Product
 }
 export default function ProductCard({product}:Props){
-  const [loading,setLoading] = useState(false);
-  const {setBasket} = useStoreContext();
-  function handleAddItem(productId:number)
-  {
-    setLoading(true);
-    agent.Basket.addItem(productId)
-    .then(basket=>setBasket(basket))
-    .catch(error=>console.log(error))
-    .finally(()=>setLoading(false));
-  }
+  const {status} = useAppSelector(state=>state.basket);
+  
+  const dispatch = UseAppDispatch();
+ 
     return (
       <Card sx={{ maxWidth: 345 }}>
         <CardHeader
@@ -48,8 +41,8 @@ export default function ProductCard({product}:Props){
         </Typography>
       </CardContent>
       <CardActions>
-        <LoadingButton loading={loading} 
-        onClick={()=>handleAddItem(product.id)} 
+        <LoadingButton loading={status.includes('PendingAddItem'+product.id)} 
+        onClick={()=>dispatch(AddBasketItemAsync({productId:product.id}))} 
         size="small"
         >Add To Cart</LoadingButton>
         <Button component={Link} to={`/catalog/${product.id}`} size="small">View</Button>
@@ -57,4 +50,15 @@ export default function ProductCard({product}:Props){
     </Card>
     )
 }
-  
+/*
+  const {setBasket} = useStoreContext();
+  function handleAddItem(productId:number)
+  {
+    setLoading(true);
+    agent.Basket.addItem(product.id)
+    .then(basket=>dispatch(setBasket(basket)))
+    .catch(error=>console.log(error))
+    .finally(()=>setLoading(false));
+  }
+  const [loading,setLoading] = useState(false);
+  */

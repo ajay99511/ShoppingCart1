@@ -1,4 +1,5 @@
 using API.Data;
+using API.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Extensions;
@@ -10,6 +11,8 @@ namespace API.Extensions;
             services.AddSwaggerGen();
             services.AddControllers();
             services.AddCors();
+            services.AddScoped<IProductRepository,ProductRepository>();
+            services.AddScoped<IUnitOfWork,UnitOfWork>();
             services.AddDbContext<StoreContext>(opt=>
             {
             opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
