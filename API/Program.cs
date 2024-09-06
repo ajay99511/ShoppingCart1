@@ -1,6 +1,8 @@
 using API.Data;
+using API.Entities;
 using API.Extensions;
 using API.Middleware;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,11 +44,11 @@ app.UseCors(x=>x.AllowAnyHeader().AllowAnyOrigin().AllowCredentials().AllowAnyMe
 var scope = app.Services.CreateScope();
 var context = scope.ServiceProvider.GetRequiredService<StoreContext>();
 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-
+var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
 try
 {
-    context.Database.Migrate();
-    DbInitializer.Intialize(context);
+    await context.Database.MigrateAsync();
+    await DbInitializer.Intialize(context, userManager);
 }
 catch (Exception ex)
 {

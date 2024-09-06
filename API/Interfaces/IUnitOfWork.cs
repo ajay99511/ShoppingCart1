@@ -8,6 +8,7 @@ namespace API.Interfaces
     public interface IUnitOfWork
     {
         public IProductRepository ProductRepository { get; }
+        public IUserRepository UserRepository { get; }
         public Task<bool> complete();
         public bool hasChanges();
 
