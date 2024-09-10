@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { router } from "../router/Routes";
 import { PaginationResponse } from "../models/Pagination";
+import { store } from "../store/ConfigureStore";
 
 const sleep = ()=>new Promise(resolve=>setTimeout(resolve,500));
 
@@ -29,6 +30,16 @@ const requests = {
         removeItem : (productId:number,quantity=1)=>requests.delete(`Basket?productId=${productId}&quantity=${quantity}`)
     };
 
+    const Account = {
+        login:(values:any)=>requests.post('Account/login',values),
+        register: (values:any)=>requests.post('Account/register',values),
+        getCurrentUser : ()=>requests.get('Account/currentUser')
+    }
+    axios.interceptors.request.use(config=>{
+        const token = store.getState().account.user?.token;
+        if(token) config.headers.Authorization = `Bearer ${token}`;
+        return config;
+    })
     axios.interceptors.response.use(async response=>{
         await sleep();
         const pagination = response.headers['pagination'];
@@ -55,7 +66,7 @@ const requests = {
                         }
                         toast.error(data.title)
                         break;
-            case 401 : toast.error(data.title)
+            case 401 : toast.error(data.title || 'unAuthorized')
                         break;
             case 404 : router.navigate('/not-found');
                         toast.error(data.title);
@@ -80,6 +91,7 @@ const requests = {
         catalog,
         testErrors,
         Basket,
+        Account,
     };
 
     export default agent;

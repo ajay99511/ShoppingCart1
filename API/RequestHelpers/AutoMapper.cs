@@ -13,6 +13,7 @@ namespace API.Extensions
         public AutoMapper()
         {
             CreateMap<User,UserDto>();
+            CreateMap<Basket,BasketDto>();
         }
     }
 }

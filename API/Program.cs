@@ -28,9 +28,13 @@ app.UseMiddleware<ExceptionMiddleware>();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c=>
+    {
+        c.ConfigObject.AdditionalItems.Add("persistAuthorization","true");
+    });
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.UseCors(x=>x.AllowAnyHeader().AllowAnyOrigin().AllowCredentials().AllowAnyMethod()

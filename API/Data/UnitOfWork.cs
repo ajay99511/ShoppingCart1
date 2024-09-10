@@ -6,10 +6,13 @@ using API.Interfaces;
 
 namespace API.Data
 {
-    public class UnitOfWork(StoreContext storeContext,IProductRepository productRepository,IUserRepository userRepository) : IUnitOfWork
+    public class UnitOfWork(StoreContext storeContext,
+    IProductRepository productRepository,IUserRepository userRepository,
+    IBasketRepository basketRepository) : IUnitOfWork
     {
         public IProductRepository ProductRepository => productRepository;
         public IUserRepository UserRepository => userRepository;
+        public IBasketRepository BasketRepository => basketRepository;
         public async Task<bool> complete()
         {
             return await storeContext.SaveChangesAsync()>0;

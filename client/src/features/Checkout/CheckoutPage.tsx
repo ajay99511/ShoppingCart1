@@ -4,7 +4,7 @@ export function CheckoutPage()
 {
     return(
         <Typography variant="h2" color="primary">
-            You should login to move to payment option
+            Only logged in users able to see this page!!!
         </Typography>
     )
 }

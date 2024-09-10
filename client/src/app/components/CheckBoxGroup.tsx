@@ -28,7 +28,8 @@ export default function CheckBoxGroup({items,checked,onChange}:Props)
                 checked={checkedItem.indexOf(item)!==-1}
                 onClick={()=>HandleCheckItem(item)}
                 />} 
-                label={item} key={item}/>
+                label={item} 
+                key={item}/>
               )
             )}
           </FormGroup>

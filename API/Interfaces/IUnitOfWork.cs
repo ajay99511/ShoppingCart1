@@ -9,6 +9,7 @@ namespace API.Interfaces
     {
         public IProductRepository ProductRepository { get; }
         public IUserRepository UserRepository { get; }
+        public IBasketRepository BasketRepository { get; }
         public Task<bool> complete();
         public bool hasChanges();
 

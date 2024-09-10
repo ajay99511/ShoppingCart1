@@ -10,11 +10,17 @@ import ServerError from "../errors/ServerError";
 import NotFound from "../errors/NotFound";
 import BasketPage from "../../features/basket/BasketPage";
 import { CheckoutPage } from "../../features/Checkout/CheckoutPage";
+import Login from "../../features/account/Login";
+import Register from "../../features/account/Register";
+import RequireAuth from "./RequireAuth";
 
 export const router = createBrowserRouter([
     {path:'/',
     element:<App />,
     children:[
+        {element:<RequireAuth/>,children:[
+            {path:'checkout',element:<CheckoutPage/>},
+        ]},
         {path:'',element: <Home />},
         {path:'catalog',element: <Catalog />},
         {path:'catalog/:id',element: <ProductDetails />},
@@ -24,7 +30,8 @@ export const router = createBrowserRouter([
         {path:'server-error',element:<ServerError/>},
         {path:'not-found',element: <NotFound/>},
         {path:'basket',element:<BasketPage/>},
-        {path:'checkout',element:<CheckoutPage/>},
+        {path:'login',element:<Login/>},
+        {path:'register',element:<Register/>},
         {path:'*',element:<Navigate replace to='/not-found'/>},
     ]
     }
