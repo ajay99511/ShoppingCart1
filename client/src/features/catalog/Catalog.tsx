@@ -3,7 +3,7 @@ import ProductList from "./ProductList";
 import LoadingComponent from "../../app/layouts/LoadingComponent";
 import { UseAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import { fetchFilters, fetchProductsAsync, productSelectors, setPageNumber, setProductParams } from "./CatalogSlice";
-import { Grid, Paper } from "@mui/material";
+import { Grid, Paper, Typography } from "@mui/material";
 import ProductSearch from "./ProductSearch";
 import RadioButtonGroup from "../../app/components/RadioButtonGroup";
 import CheckBoxGroup from "../../app/components/CheckBoxGroup";
@@ -41,6 +41,7 @@ export default function Catalog(){
               selectedValue={productParams.orderBy}/>
             </Paper>
             <Paper sx={{mb:2,p:2}}>
+            <Typography variant="h6">Brands</Typography>
             <CheckBoxGroup 
             items={brands} 
             checked={productParams.brands} 
@@ -48,6 +49,7 @@ export default function Catalog(){
             ></CheckBoxGroup>
           </Paper>
           <Paper sx={{mb:2,p:2}}>
+          <Typography variant="h6">Types</Typography>
             <CheckBoxGroup 
             items={types}
             checked={productParams.types}

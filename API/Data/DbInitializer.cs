@@ -1,3 +1,4 @@
+using System.Text.Json;
 using API.Entities;
 using Microsoft.AspNetCore.Identity;
 
@@ -7,24 +8,11 @@ public static class DbInitializer
 {
     public static async Task Intialize(StoreContext context, UserManager<User> userManager)
     {
-        if(!userManager.Users.Any())
-        {
-            var user = new User{
-                UserName = "bob",
-                Email = "bob@email.com",
-            };
-            await userManager.CreateAsync(user,"Pa$$w0rd");
-            await userManager.AddToRoleAsync(user,"Member");
-
-            var admin = new User{
-                UserName = "admin",
-                Email = "admin@gmail.com"
-            };
-            await userManager.CreateAsync(admin,"Pa$$w0rd");
-            await userManager.AddToRolesAsync(admin,new [] {"Admin","Member"});
-        }
-
+        
         if(context.Products.Any()) return;
+        // var ProductData = await File.ReadAllTextAsync("Data/productSeed.json");
+        // var options = new JsonSerializerOptions{PropertyNameCaseInsensitive = true};
+        // var products = JsonSerializer.Deserialize<List<Product>>(ProductData,options);
 
         var products = new List<Product>()
         {
@@ -228,6 +216,23 @@ public static class DbInitializer
         foreach (var product in products)
         {
             context.Products.Add(product);
+        }
+
+        if(!userManager.Users.Any())
+        {
+            var user = new User{
+                UserName = "bob",
+                Email = "bob@email.com",
+            };
+            await userManager.CreateAsync(user,"Pa$$w0rd");
+            await userManager.AddToRoleAsync(user,"Member");
+
+            var admin = new User{
+                UserName = "admin",
+                Email = "admin@gmail.com"
+            };
+            await userManager.CreateAsync(admin,"Pa$$w0rd");
+            await userManager.AddToRolesAsync(admin,new [] {"Admin","Member"});
         }
         context.SaveChanges();
     }

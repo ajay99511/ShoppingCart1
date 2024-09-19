@@ -14,6 +14,7 @@ function App() {
   const dispatch = UseAppDispatch();
   const [loading,setLoading] = useState(true);
   const {basket} = useAppSelector(state=>state.basket);
+  const {status} = useAppSelector(state=>state.account);
 
   const initializeUserBasket = useCallback(async()=>{
     try {
@@ -22,6 +23,13 @@ function App() {
       {
         await dispatch(FetchBasketAsync());
       }
+      // else
+      // {
+      //   if(getCookie('buyerId') != null)
+      //   {
+      //     await dispatch(FetchBasketAsync());
+      //   }
+      // }
     } catch (error) {
       console.log(error);
     }

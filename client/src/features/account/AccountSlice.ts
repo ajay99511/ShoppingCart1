@@ -9,11 +9,13 @@ import { setBasket } from "../basket/BasketSlice";
 // const navigate = useNavigate();
 export interface AccountState
 {
-    user:User|null
+    user:User|null,
+    status : string
 }
 const initialState:AccountState =
 {
-    user:null
+    user:null,
+    status : 'Idle'
 }
 export const signInAsync = createAsyncThunk<User,FieldValues>(
     'account/signInAsync',
@@ -37,7 +39,10 @@ export const fetchCurrentUserAsync = createAsyncThunk<User>(
         try {
             const userDto = await agent.Account.getCurrentUser();
             const {basket,...user} = userDto;
-            if(basket) thunkAPI.dispatch(setBasket(basket));
+            if(basket) 
+                {
+                    thunkAPI.dispatch(setBasket(basket));
+                }
             localStorage.setItem('user',JSON.stringify(user));
             return user;
         } catch (error:any) {
@@ -67,7 +72,7 @@ export const AccountSlice = createSlice(
             setUser:(state,action)=>{
                 state.user = action.payload;
                 localStorage.setItem('user',JSON.stringify(action.payload));
-                router.navigate('/catalog')
+                // router.navigate('/catalog')
             }
         },
         extraReducers(builder) {
@@ -76,15 +81,21 @@ export const AccountSlice = createSlice(
                 localStorage.removeItem('user');
                 toast.error("Session Expired!! Please re-login");
                 router.navigate('/');
+                state.status = 'Reject'
         }),
             // builder.addMatcher(isAnyOf(fetchCurrentUserAsync.pending,signInAsync.pending),(state,action)=>{
             // }),
+        builder.addCase(signInAsync.rejected,(state,action)=>{
+            console.log(action.payload)
+            state.status = 'Reject'
+        }),
         builder.addMatcher(isAnyOf(fetchCurrentUserAsync.fulfilled,signInAsync.fulfilled),(state,action)=>{
             state.user = action.payload
-        }),
-        builder.addMatcher(isAnyOf(signInAsync.rejected),(state,action)=>{
-            console.log(action.payload)
+            state.status = 'Idle'
         })
+        // builder.addMatcher(isAnyOf(signInAsync.rejected),(state,action)=>{
+        //     console.log(action.payload)
+        // })
         }
     }
 )

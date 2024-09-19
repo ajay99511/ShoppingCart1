@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
 import { Basket } from "../../app/models/Basket";
 import agent from "../../app/api/agent";
+import { getCookie } from "../../app/util/util";
 export interface BasketState
 {
     basket : Basket | null,
@@ -19,11 +20,11 @@ export const FetchBasketAsync = createAsyncThunk<Basket>(
            return thunkAPI.rejectWithValue({error: error.data});
         }
     },
-    // {
-    //     condition:()=>{
-    //         if(!getCookie('buyerId')) return false;
-    //     }
-    // }
+    {
+        condition:()=>{
+            if(!getCookie('buyerId')) return false;
+        }
+    }
 )
 export const AddBasketItemAsync = createAsyncThunk<Basket,{productId:number,quantity?:number}>(
     'basket/addBasketItemAsync',

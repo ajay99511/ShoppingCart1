@@ -40,7 +40,7 @@ export default function Header({darkMode,handleThemeChange}:Props){
                 <Box display='flex' alignContent='center'>
                 <Typography variant="h6"
                 component={NavLink}
-                to='/'
+                to=' '
                 sx={{color:"inherit",
                 textDecoration:"none",
                 

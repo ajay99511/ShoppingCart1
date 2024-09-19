@@ -45,6 +45,7 @@ namespace API.Extensions;
             services.AddScoped<IProductRepository,ProductRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IBasketRepository,BasketRepository>();
+            services.AddScoped<IOrderRepository,OrderRepository>();
             services.AddScoped<IUnitOfWork,UnitOfWork>();
             services.AddScoped<TokenService>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -66,7 +67,7 @@ namespace API.Extensions;
             services.AddIdentityCore<User>(opt=>
             opt.User.RequireUniqueEmail = true
             )
-            .AddRoles<IdentityRole>()
+            .AddRoles<Role>()
             .AddEntityFrameworkStores<StoreContext>();
         }
     }

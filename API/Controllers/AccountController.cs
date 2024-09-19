@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using API.Data;
 using API.DTOs;
@@ -11,6 +12,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace API.Controllers
@@ -30,7 +32,7 @@ namespace API.Controllers
             var anonBasket = await unitOfWork.BasketRepository.retrieveBasket(Request.Cookies["buyerId"]);
             if(userBasket == null && anonBasket == null)
             {
-                userBasket = CreateBasket();
+               userBasket = CreateBasket();
             }
             if(anonBasket != null)
             {
@@ -39,9 +41,15 @@ namespace API.Controllers
                     unitOfWork.BasketRepository.DeleteBasket(userBasket);
                     anonBasket.BuyerId = user.UserName;
                     Response.Cookies.Delete("buyerId");
-                    await unitOfWork.complete();
+                    // await unitOfWork.complete();
+                }
+                else
+                {
+                    anonBasket.BuyerId = user.UserName;
+                    Response.Cookies.Delete("buyerId");
                 }
             }
+            await unitOfWork.complete();
             var token = await tokenService.CreateToken(user);
             return new UserDto 
             {
@@ -77,18 +85,33 @@ namespace API.Controllers
             var username = User.Identity.Name;
             var user = await userManager.FindByNameAsync(username);
             var Basket = await unitOfWork.BasketRepository.retrieveBasket(username);
+            // if(Basket == null)
+            // {
+            // Basket = Create(username);
+            // await unitOfWork.complete();
+            // }
             return new UserDto{
                 Email = user.Email,
                 Username = username,
                 Token = await tokenService.CreateToken(user),
-                basket =Basket!=null?unitOfWork.BasketRepository.ConvertBasketDto(Basket):null
+                basket = Basket!=null?unitOfWork.BasketRepository.ConvertBasketDto(Basket):null,
             };
 
+        }
+
+        [Authorize]
+        [HttpGet("savedAddress")]
+        public async Task<ActionResult<UserAddress>> GetSavedAddress()
+        {
+            return await userManager.Users
+            .Where(u=>u.UserName == User.Identity.Name)
+            .Select(u=>u.userAddress)
+            .FirstOrDefaultAsync();
         }
         
         private Basket CreateBasket()
         {
-            var buyerId = User.Identity?.Name;
+            var buyerId = User.Identity.Name;
             if(string.IsNullOrEmpty(buyerId))
             {
                 buyerId = Guid.NewGuid().ToString();
@@ -103,5 +126,51 @@ namespace API.Controllers
             unitOfWork.BasketRepository.AddBasket(basket);
             return basket;
         }
+
+
+        // [HttpPost("registerProducts")]
+        // public async Task<ActionResult> RegisterProducts()
+        // {
+        //     var ProductData = await System.IO.File.ReadAllTextAsync("Data/JsonData/productData.json");
+        //     var options = new JsonSerializerOptions{PropertyNameCaseInsensitive = true};
+        //     var products = JsonSerializer.Deserialize<List<Product>>(ProductData,options);
+        //     foreach (var product in products)
+        //     {
+        //     unitOfWork.ProductRepository.AddProduct(product);
+        //     }
+        //     await unitOfWork.complete();
+        //     return Ok(products);
+        // }
     }
 }
+
+
+
+
+
+
+//         public class StringToDecimalConverter : JsonConverter<decimal>
+// {
+//     public override decimal Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+//     {
+//         if (reader.TokenType == JsonTokenType.String && decimal.TryParse(reader.GetString(), out var value))
+//         {
+//             return value;
+//         }
+//         return reader.GetDecimal();
+//     }
+
+//     public override void Write(Utf8JsonWriter writer, decimal value, JsonSerializerOptions options)
+//     {
+//         writer.WriteNumberValue(value);
+//     }
+// }
+// var options = new JsonSerializerOptions
+// {
+//     Converters =
+//     {
+//         new StringToDecimalConverter()
+//     }
+// };
+
+// var result = JsonSerializer.Deserialize<List<YourModel>>(jsonString, options);

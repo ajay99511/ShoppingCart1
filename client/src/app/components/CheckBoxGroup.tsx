@@ -20,7 +20,6 @@ export default function CheckBoxGroup({items,checked,onChange}:Props)
     }
     return(
         <FormGroup >
-            <Typography variant="h6">Brand</Typography>
             {items.map(
               (item)=>(
                 <FormControlLabel 

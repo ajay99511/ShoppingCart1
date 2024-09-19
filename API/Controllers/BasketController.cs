@@ -16,7 +16,7 @@ namespace API.Controllers
         {
             var buyerId = unitOfWork.BasketRepository.getBuyerId();
             // var buyerId = getBuyerId();
-            var basket = await RetriveBasket(buyerId);
+            var basket = await unitOfWork.BasketRepository.retrieveBasket(buyerId);
             if (basket == null) return NotFound();
             var basketDto = unitOfWork.BasketRepository.ConvertBasketDto(basket);
             return basketDto;
@@ -26,7 +26,7 @@ namespace API.Controllers
         {
             // var buyerId = getBuyerId();
             var buyerId = unitOfWork.BasketRepository.getBuyerId();
-            var basket = await RetriveBasket(buyerId);
+            var basket = await unitOfWork.BasketRepository.retrieveBasket(buyerId);
             if(basket == null) basket = CreateBasket();
             var product = await unitOfWork.ProductRepository.GetProductById(productId);
             if(product == null) return BadRequest(new ProblemDetails{Title="Product Not Found"});

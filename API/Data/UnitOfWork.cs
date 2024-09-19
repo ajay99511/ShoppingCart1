@@ -8,11 +8,12 @@ namespace API.Data
 {
     public class UnitOfWork(StoreContext storeContext,
     IProductRepository productRepository,IUserRepository userRepository,
-    IBasketRepository basketRepository) : IUnitOfWork
+    IBasketRepository basketRepository, IOrderRepository orderRepository) : IUnitOfWork
     {
         public IProductRepository ProductRepository => productRepository;
         public IUserRepository UserRepository => userRepository;
         public IBasketRepository BasketRepository => basketRepository;
+        public IOrderRepository OrderRepository => orderRepository;
         public async Task<bool> complete()
         {
             return await storeContext.SaveChangesAsync()>0;

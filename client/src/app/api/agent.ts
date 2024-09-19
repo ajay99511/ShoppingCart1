@@ -30,10 +30,17 @@ const requests = {
         removeItem : (productId:number,quantity=1)=>requests.delete(`Basket?productId=${productId}&quantity=${quantity}`)
     };
 
+    const Order = {
+        list : ()=>requests.get('Orders'),
+        fetch : (id:number)=>requests.get(`Orders/${id}`),
+        create: (values:any)=> requests.post('Orders',values)
+    }
+
     const Account = {
         login:(values:any)=>requests.post('Account/login',values),
         register: (values:any)=>requests.post('Account/register',values),
-        getCurrentUser : ()=>requests.get('Account/currentUser')
+        getCurrentUser : ()=>requests.get('Account/currentUser'),
+        fetchAddress : () => requests.get('Account/savedAddress')
     }
     axios.interceptors.request.use(config=>{
         const token = store.getState().account.user?.token;
@@ -76,7 +83,7 @@ const requests = {
             default : toast.error(data.title)
                         break;
         }
-        return Promise.reject(error.response);
+        return Promise.reject(error.response); 
     });
 
     const testErrors = {
@@ -92,6 +99,7 @@ const requests = {
         testErrors,
         Basket,
         Account,
+        Order
     };
 
     export default agent;

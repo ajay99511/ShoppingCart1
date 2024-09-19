@@ -1,8 +1,9 @@
-import { Button, Menu, MenuItem, Typography } from "@mui/material";
+import { Button, Menu, MenuItem } from "@mui/material";
 import React from "react";
 import { UseAppDispatch, useAppSelector } from "../store/ConfigureStore";
 import { logout } from "../../features/account/AccountSlice";
 import { clearBasket } from "../../features/basket/BasketSlice";
+import { Link } from "react-router-dom";
 
 export default function SignInMenu()
 {
@@ -40,7 +41,7 @@ export default function SignInMenu()
           // }}
         >
           <MenuItem onClick={handleClose}>Profile</MenuItem>
-          <MenuItem onClick={handleClose}>My Orders</MenuItem>
+          <MenuItem component={Link} to="orders">My Orders</MenuItem>
           <MenuItem onClick={()=>{dispatch(logout()),dispatch(clearBasket())}}>Logout</MenuItem>
         </Menu>
       </div>

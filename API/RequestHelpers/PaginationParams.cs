@@ -7,7 +7,7 @@ namespace API.RequestHelpers
 {
     public class PaginationParams
     {
-        private int MaxPageSize = 50;
+        private int MaxPageSize = 200;
         public int PageNumber { get; set; } = 1;
         private int _PageSize = 6;
         public int PageSize 

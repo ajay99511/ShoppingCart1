@@ -73,7 +73,7 @@ function initParams(){
     return (
         {
             pageNumber :1,
-            pageSize:6,
+            pageSize:50,
             orderBy:'name',
             brands:[],
             types :[]
@@ -141,6 +141,7 @@ export const CatalogSlice = createSlice(
                 state.status = 'pendingFetchFilters'
             })
             builder.addCase(fetchFilters.fulfilled,(state,action)=>{
+                // state.brands = action.payload.brands.slice(0,25);
                 state.brands = action.payload.brands;
                 state.types = action.payload.types;
                 state.filtersLoaded = true;
