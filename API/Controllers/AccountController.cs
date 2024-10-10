@@ -33,21 +33,18 @@ namespace API.Controllers
             if(userBasket == null && anonBasket == null)
             {
                userBasket = CreateBasket();
+               userBasket.BuyerId = user.UserName;
             }
             if(anonBasket != null)
             {
                 if(userBasket != null)
                 {
                     unitOfWork.BasketRepository.DeleteBasket(userBasket);
-                    anonBasket.BuyerId = user.UserName;
-                    Response.Cookies.Delete("buyerId");
+                    // Response.Cookies.Delete("buyerId");
                     // await unitOfWork.complete();
                 }
-                else
-                {
-                    anonBasket.BuyerId = user.UserName;
-                    Response.Cookies.Delete("buyerId");
-                }
+                anonBasket.BuyerId = user.UserName;
+                Response.Cookies.Delete("buyerId");
             }
             await unitOfWork.complete();
             var token = await tokenService.CreateToken(user);
@@ -111,14 +108,15 @@ namespace API.Controllers
         
         private Basket CreateBasket()
         {
-            var buyerId = User.Identity.Name;
+            string buyerId = User.Identity.Name;
+            // var buyerId = User.Identity.Name;
             if(string.IsNullOrEmpty(buyerId))
             {
                 buyerId = Guid.NewGuid().ToString();
                 var cookieOptions = new CookieOptions{IsEssential=true,Expires=DateTime.Now.AddDays(30)};
                 Response.Cookies.Append("buyerId",buyerId,cookieOptions);
             }
-            var basket = new Basket
+            Basket basket = new Basket
             {
                 BuyerId =buyerId,
             };

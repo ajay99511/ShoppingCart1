@@ -27,7 +27,7 @@ namespace API.Controllers
             // var buyerId = getBuyerId();
             var buyerId = unitOfWork.BasketRepository.getBuyerId();
             var basket = await unitOfWork.BasketRepository.retrieveBasket(buyerId);
-            if(basket == null) basket = CreateBasket();
+            if(basket == null) basket = CreateBasket(buyerId);
             var product = await unitOfWork.ProductRepository.GetProductById(productId);
             if(product == null) return BadRequest(new ProblemDetails{Title="Product Not Found"});
             basket.AddItem(product,quantity);
@@ -61,9 +61,9 @@ namespace API.Controllers
             // .FirstOrDefaultAsync(x => x.BuyerId == Request.Cookies["buyerId"]);
         }
 
-        private Basket CreateBasket()
+        private Basket CreateBasket(string buyerId)
         {
-            var buyerId = User.Identity?.Name;
+            // var buyerId = User.Identity?.Name;
             if(string.IsNullOrEmpty(buyerId))
             {
                 buyerId = Guid.NewGuid().ToString();

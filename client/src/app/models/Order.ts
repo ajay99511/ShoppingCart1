@@ -1,4 +1,3 @@
-import { unstable_DataStrategyFunctionArgs } from "react-router-dom"
 
 export interface Order {
     id: number

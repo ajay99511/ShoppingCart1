@@ -14,6 +14,7 @@ namespace API.Interfaces
         public BasketDto ConvertBasketDto(Basket basket);
          public Task<Basket> retrieveBasket(string buyerId);
          public string getBuyerId();
+         
         //  public Basket CreateBasket();
     }
 }

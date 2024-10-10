@@ -34,13 +34,13 @@ export default function Header({darkMode,handleThemeChange}:Props){
     const {basket} = useAppSelector(state=>state.basket);
     const itemCount = basket?.items.reduce((sum,item)=>sum+item.quantity,0);
     return(
-        <AppBar position="static" sx={{mb:4}}>
+        <AppBar position="static">
             <Toolbar sx={{display:'flex', justifyContent:'space-between', alignContent:'center'}}>
 
                 <Box display='flex' alignContent='center'>
                 <Typography variant="h6"
                 component={NavLink}
-                to=' '
+                to='/'
                 sx={{color:"inherit",
                 textDecoration:"none",
                 

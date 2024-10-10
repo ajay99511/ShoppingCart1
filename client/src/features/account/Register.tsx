@@ -3,15 +3,11 @@ import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { Avatar, Container, Paper } from '@mui/material';
-import { LockOutlined, Message } from '@mui/icons-material';
+import { LockOutlined } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
-import { FieldValues, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { LoadingButton } from '@mui/lab';
-import { UseAppDispatch } from '../../app/store/ConfigureStore';
-import { signInAsync } from './AccountSlice';
 import agent from '../../app/api/agent';
-import error from '../TestErrors/error';
-import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 export default function Register() {

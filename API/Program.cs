@@ -2,6 +2,7 @@ using API.Data;
 using API.Entities;
 using API.Extensions;
 using API.Middleware;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,16 +35,18 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+app.UseCors(x=>x.AllowAnyHeader().AllowAnyOrigin().AllowCredentials().AllowAnyMethod()
+.WithOrigins("http://localhost:3000"));
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.UseCors(x=>x.AllowAnyHeader().AllowAnyOrigin().AllowCredentials().AllowAnyMethod()
-.WithOrigins("http://localhost:3000"));
+app.MapFallbackToController("Index","Fallback");
 
-// app.UseCors(opt=>
-// {
-//     opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
-// });
+
+// app.UseCors(opt=>opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+// );
 
 var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;

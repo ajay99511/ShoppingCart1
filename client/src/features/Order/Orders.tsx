@@ -4,7 +4,6 @@ import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody
 import agent from "../../app/api/agent";
 import LoadingComponent from "../../app/layouts/LoadingComponent";
 import { currencyFormat } from "../../app/util/util";
-import { Link } from "react-router-dom";
 import OrderDetail from "./OrderDetail";
 
 export default function Orders()

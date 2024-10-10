@@ -1,7 +1,7 @@
 import { Container, createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import Header from "./Header";
 import { useCallback, useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LoadingComponent from "./LoadingComponent";
@@ -9,13 +9,15 @@ import { UseAppDispatch, useAppSelector } from "../store/ConfigureStore";
 import { FetchBasketAsync } from "../../features/basket/BasketSlice";
 import { fetchCurrentUserAsync } from "../../features/account/AccountSlice";
 import { getCookie } from "../util/util";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Home from "../../features/home/Home";
 
 function App() {
+  const location = useLocation();
   const dispatch = UseAppDispatch();
   const [loading,setLoading] = useState(true);
   const {basket} = useAppSelector(state=>state.basket);
-  const {status} = useAppSelector(state=>state.account);
-
   const initializeUserBasket = useCallback(async()=>{
     try {
       await dispatch(fetchCurrentUserAsync());
@@ -23,6 +25,10 @@ function App() {
       {
         await dispatch(FetchBasketAsync());
       }
+      if(getCookie('buyerId') != null)
+          {
+            await dispatch(FetchBasketAsync());
+          }
       // else
       // {
       //   if(getCookie('buyerId') != null)
@@ -56,7 +62,7 @@ function App() {
     setDarkMode(!darkMode);
   }
 
-  if(loading) return <LoadingComponent message="Initializing App..."/>
+  // if(loading) return <LoadingComponent message="Initializing App..."/>
   
   return (
     <>
@@ -64,9 +70,12 @@ function App() {
     <CssBaseline/>
     <ToastContainer position='bottom-right' hideProgressBar theme="colored"/>  
     <Header darkMode={darkMode} handleThemeChange={handleThemeChange} />
-    <Container>
+    {loading ? <LoadingComponent message="Initializing App..."/>
+    : location.pathname === '/' ? <Home/>:
+    <Container sx={{mt:4}}>
     <Outlet />
     </Container>
+    }
     </ThemeProvider>
     </>
   );

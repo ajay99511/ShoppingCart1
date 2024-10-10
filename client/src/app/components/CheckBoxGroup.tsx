@@ -1,4 +1,4 @@
-import { FormGroup, Typography, FormControlLabel, Checkbox } from "@mui/material"
+import { FormGroup, FormControlLabel, Checkbox } from "@mui/material"
 import { useState } from "react"
 
 interface Props{

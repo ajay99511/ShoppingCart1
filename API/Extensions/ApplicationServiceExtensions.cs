@@ -47,7 +47,7 @@ namespace API.Extensions;
             services.AddScoped<IBasketRepository,BasketRepository>();
             services.AddScoped<IOrderRepository,OrderRepository>();
             services.AddScoped<IUnitOfWork,UnitOfWork>();
-            services.AddScoped<TokenService>();
+            services.AddTransient<TokenService>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(opt=>{
                 opt.TokenValidationParameters = new TokenValidationParameters{
